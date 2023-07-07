@@ -7,8 +7,8 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-@Getter
-@Setter
+
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -22,10 +22,10 @@ public class User
     @Column(name = "user_name")
     private String name;
 
-    @Column(name = "user_email",unique = true)
+    @Column(name = "user_email")
     private String email;
 
-    @Column(name = "user_password", length = 10,nullable = true)
+    @Column(name = "user_password")
     private String password;
 
     private String gender;

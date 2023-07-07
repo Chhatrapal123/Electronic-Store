@@ -4,8 +4,7 @@ import lombok.*;
 
 import javax.persistence.Column;
 import javax.persistence.Id;
-@Getter
-@Setter
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
