@@ -8,6 +8,10 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 @ControllerAdvice
 public class GlobalExceptionHandler
 {
+    /**
+     * @param ex
+     * @return
+     */
      public ResponseEntity<ApiResponseMessage>ResourceNotFoundExceptionHandler(ResourceNotFoundException ex)
      {
          String message = ex.getMessage();

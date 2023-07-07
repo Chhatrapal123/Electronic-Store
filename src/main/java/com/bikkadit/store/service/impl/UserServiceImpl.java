@@ -25,7 +25,14 @@ public class UserServiceImpl implements UserService
     @Autowired
     private ModelMapper mapper;
 
+
     private static final Logger LOGGER = LoggerFactory.getLogger(UserServiceImpl.class);
+
+    /**
+     * @implNote Creating User
+     * @param userDto
+     * @return
+     */
     @Override
     public UserDto createUser(UserDto userDto)
     {
@@ -40,10 +47,16 @@ public class UserServiceImpl implements UserService
         User savedUser = userRepo.save(user);
         //entity -> dto
         UserDto newDto = entityToDto(savedUser);
-        LOGGER.info("Saving The User "+ newDto);
+        LOGGER.info("Completed Request For Saving The User "+ newDto);
         return newDto;
     }
 
+    /**
+     * @implNote Updating User Details
+     * @param userDto
+     * @param userId
+     * @return
+     */
     @Override
     public UserDto updateUser(UserDto userDto, String userId)
     {
@@ -57,10 +70,14 @@ public class UserServiceImpl implements UserService
         user.setImageName(userDto.getImageName());
         User updatedUser = userRepo.save(user);
         UserDto updatedDto = entityToDto(updatedUser);
-        LOGGER.info("Completed Request For Saving The User  "+updatedDto);
+        LOGGER.info("Completed Request For Updating The User  "+updatedDto);
         return updatedDto;
     }
 
+    /**
+     * @implNote Delete User
+     * @param userId
+     */
     @Override
     public void deleteUser(String userId)
     {
@@ -70,6 +87,10 @@ public class UserServiceImpl implements UserService
         userRepo.delete(user);
     }
 
+    /**
+     * @implNote Fetching All Details Of User
+     * @return
+     */
     @Override
     public List<UserDto> getAllUser()
     {
@@ -80,6 +101,11 @@ public class UserServiceImpl implements UserService
         return dtoList;
     }
 
+    /**
+     * @implNote Fetching User By ID
+     * @param userId
+     * @return
+     */
     @Override
     public UserDto getUserById(String userId)
     {
@@ -89,6 +115,11 @@ public class UserServiceImpl implements UserService
         return entityToDto(user);
     }
 
+    /**
+     * @implNote Fetching User Details By Email
+     * @param email
+     * @return
+     */
     @Override
     public UserDto getUserByEmail(String email)
     {
@@ -98,6 +129,11 @@ public class UserServiceImpl implements UserService
         return entityToDto(user);
     }
 
+    /**
+     * @implNote Search User
+     * @param keyword
+     * @return
+     */
     @Override
     public List<UserDto> searchUser(String keyword)
     {
@@ -107,6 +143,12 @@ public class UserServiceImpl implements UserService
         LOGGER.info("Completed Request for Fetching User details :"+dtoList);
         return dtoList;
     }
+
+    /**
+     * @implNote Entity to Dto Conversion
+     * @param savedUser
+     * @return
+     */
     private UserDto entityToDto(User savedUser) {
 //        UserDto userDto = UserDto.builder()
 //                .userId(savedUser.getUserId())
@@ -119,6 +161,11 @@ public class UserServiceImpl implements UserService
         return mapper.map(savedUser,UserDto.class);
     }
 
+    /**
+     * @implNote Dto to Entity Conversion
+     * @param userDto
+     * @return
+     */
     private User dtoToEntity(UserDto userDto) {
 //        User user = User.builder()
 //                .name(userDto.getName())
