@@ -3,6 +3,7 @@ package com.bikkadit.store.service.impl;
 import com.bikkadit.store.Constant.AppConstant;
 import com.bikkadit.store.dto.UserDto;
 import com.bikkadit.store.entity.User;
+import com.bikkadit.store.exception.ResourceNotFoundException;
 import com.bikkadit.store.repository.UserRepo;
 import com.bikkadit.store.service.UserService;
 import org.modelmapper.ModelMapper;
@@ -31,81 +32,79 @@ public class UserServiceImpl implements UserService
         LOGGER.info("Inside createUser()");
         //generate unique id in String Format
         String userId = UUID.randomUUID().toString();
-        LOGGER.info("Generate unique Id: "+ userId);
+        LOGGER.info("Generated unique Id: "+ userId);
         userDto.setUserId(userId);
 
         // dto -> entity
         User user = dtoToEntity(userDto);
-        LOGGER.info("Saving the User: "+user);
         User savedUser = userRepo.save(user);
-        LOGGER.info("saved User "+savedUser);
         //entity -> dto
         UserDto newDto = entityToDto(savedUser);
-        LOGGER.info("Conversion Successful");
+        LOGGER.info("Saving The User "+ newDto);
         return newDto;
     }
 
     @Override
     public UserDto updateUser(UserDto userDto, String userId)
     {
-        LOGGER.info("Inside updateUser() with User Id "+userId);
-        User user = userRepo.findById(userId).orElseThrow(() -> new RuntimeException(AppConstant.USER_NOT_FOUND));
+        LOGGER.info("Inside updateUser() Fetching User For userId :"+ userId);
+        User user = userRepo.findById(userId).orElseThrow(() -> new ResourceNotFoundException(AppConstant.USER_NOT_FOUND));
+        LOGGER.info("Fetched User is: "+ user);
         user.setName(userDto.getName());
         user.setAbout(userDto.getAbout());
         user.setGender(userDto.getGender());
         user.setPassword(userDto.getPassword());
         user.setImageName(userDto.getImageName());
-        LOGGER.info("Updated User: "+user);
         User updatedUser = userRepo.save(user);
         UserDto updatedDto = entityToDto(updatedUser);
-        LOGGER.info("User updated successfully "+updatedDto);
+        LOGGER.info("Completed Request For Saving The User  "+updatedDto);
         return updatedDto;
     }
 
     @Override
     public void deleteUser(String userId)
     {
-        LOGGER.info("Inside deleteUser() with id "+userId);
-        User user = userRepo.findById(userId).orElseThrow(() -> new RuntimeException(AppConstant.USER_NOT_FOUND));
+        LOGGER.info("Inside deleteUser() for id "+userId);
+        User user = userRepo.findById(userId).orElseThrow(() -> new ResourceNotFoundException(AppConstant.USER_NOT_FOUND));
+        LOGGER.info("Completed Request to Delete User : "+user);
         userRepo.delete(user);
-        LOGGER.info("Deleted User: "+user);
     }
 
     @Override
     public List<UserDto> getAllUser()
     {
-        LOGGER.info("Inside getAllUser");
+        LOGGER.info("Inside getAllUser()");
         List<User> users = userRepo.findAll();
         List<UserDto> dtoList = users.stream().map(user -> entityToDto(user)).collect(Collectors.toList());
-        LOGGER.info("List Of User: "+dtoList);
+        LOGGER.info("Completed Request for Fetching List Of Users: "+dtoList);
         return dtoList;
     }
 
     @Override
     public UserDto getUserById(String userId)
     {
-        LOGGER.info("Inside getUserById() with User Id: "+userId);
-        User user = userRepo.findById(userId).orElseThrow(() -> new RuntimeException(AppConstant.USER_NOT_FOUND));
-        LOGGER.info("User with Id: "+user);
+        LOGGER.info("Inside getUserById() For User Id: "+userId);
+        User user = userRepo.findById(userId).orElseThrow(() -> new ResourceNotFoundException(AppConstant.USER_NOT_FOUND));
+        LOGGER.info("Completed Request for Fetching User with Id: "+user);
         return entityToDto(user);
     }
 
     @Override
     public UserDto getUserByEmail(String email)
     {
-        LOGGER.info("Inside getUserByEmail() with Email: "+email);
-        User user = userRepo.findByEmail(email).orElseThrow(() -> new RuntimeException(AppConstant.EMAIL_NOT_FOUND));
-        LOGGER.info("User By email: "+user);
+        LOGGER.info("Inside getUserByEmail() For Email: "+email);
+        User user = userRepo.findByEmail(email).orElseThrow(() -> new ResourceNotFoundException(AppConstant.EMAIL_NOT_FOUND));
+        LOGGER.info("Completed Request for Fetching User By email: "+user);
         return entityToDto(user);
     }
 
     @Override
     public List<UserDto> searchUser(String keyword)
     {
-        LOGGER.info("Inside searchUser() with keyword: "+keyword);
+        LOGGER.info("Inside searchUser() For keyword: "+keyword);
         List<User> users = userRepo.findByNameContaining(keyword);
         List<UserDto> dtoList = users.stream().map(user -> entityToDto(user)).collect(Collectors.toList());
-        LOGGER.info("User details :"+dtoList);
+        LOGGER.info("Completed Request for Fetching User details :"+dtoList);
         return dtoList;
     }
     private UserDto entityToDto(User savedUser) {

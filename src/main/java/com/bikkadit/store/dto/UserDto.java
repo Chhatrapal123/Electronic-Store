@@ -1,10 +1,9 @@
 package com.bikkadit.store.dto;
 
 import lombok.*;
-
-import javax.persistence.Column;
-import javax.persistence.Id;
-@Data
+@Getter
+@Setter
+@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
