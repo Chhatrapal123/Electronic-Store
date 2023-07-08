@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -26,7 +27,7 @@ public class UserController
      * @return
      */
     @PostMapping("/")
-    public ResponseEntity<UserDto>createUser(@RequestBody UserDto userDto)
+    public ResponseEntity<UserDto>createUser(@Valid @RequestBody UserDto userDto)
     {
         LOGGER.info("Inside createUser()");
         UserDto user = userService.createUser(userDto);
@@ -41,7 +42,7 @@ public class UserController
      * @return
      */
     @PutMapping("/{userId}")
-    public ResponseEntity<UserDto>updateUser(@PathVariable("userId")String userId,@RequestBody UserDto userDto)
+    public ResponseEntity<UserDto>updateUser(@Valid @PathVariable("userId")String userId,@RequestBody UserDto userDto)
     {
         LOGGER.info("Inside updateUser()");
         UserDto updatedUserDto = userService.updateUser(userDto, userId);
