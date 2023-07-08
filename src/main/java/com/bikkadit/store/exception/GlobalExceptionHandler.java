@@ -16,7 +16,7 @@ public class GlobalExceptionHandler
      * @param ex
      * @return
      */
-    @ExceptionHandler
+    @ExceptionHandler(ResourceNotFoundException.class)
      public ResponseEntity<ApiResponseMessage>ResourceNotFoundExceptionHandler(ResourceNotFoundException ex)
      {
          LOGGER.info("Exception Handler invoked !!");
