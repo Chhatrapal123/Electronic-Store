@@ -1,15 +1,21 @@
 package com.bikkadit.store.service.impl;
 
 import com.bikkadit.store.Constant.AppConstant;
+import com.bikkadit.store.dto.PageableResponse;
 import com.bikkadit.store.dto.UserDto;
 import com.bikkadit.store.entity.User;
 import com.bikkadit.store.exception.ResourceNotFoundException;
+import com.bikkadit.store.helper.Helper;
 import com.bikkadit.store.repository.UserRepo;
 import com.bikkadit.store.service.UserService;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -92,13 +98,28 @@ public class UserServiceImpl implements UserService
      * @return
      */
     @Override
-    public List<UserDto> getAllUser()
+    public PageableResponse<UserDto> getAllUser(int pageNumber,int pageSize,String sortBy,String sortDir)
     {
         LOGGER.info("Inside getAllUser()");
-        List<User> users = userRepo.findAll();
-        List<UserDto> dtoList = users.stream().map(user -> entityToDto(user)).collect(Collectors.toList());
-        LOGGER.info("Completed Request for Fetching List Of Users: "+dtoList);
-        return dtoList;
+        Sort sort = sortDir.equalsIgnoreCase("asc")?Sort.by(sortBy).ascending():Sort.by(sortBy).descending();
+        Pageable pageable = PageRequest.of(pageNumber-1,pageSize,sort);
+        Page<User> page = userRepo.findAll(pageable);
+
+        PageableResponse<UserDto> response = Helper.getPageableResponse(page, UserDto.class);
+
+//        List<User> users = page.getContent();
+//
+//        //List<User> users = userRepo.findAll();
+//        List<Object> dtoList = users.stream().map(user -> entityToDto(user)).collect(Collectors.toList());
+//        PageableResponse pageableResponse = PageableResponse.builder()
+//                .pageNumber(page.getNumber())
+//                .pageSize(page.getSize())
+//                .lastPage(page.isLast())
+//                .content(dtoList)
+//                .totalElement(page.getTotalElements())
+//                .build();
+        LOGGER.info("Completed Request for Fetching List Of Users: "+response);
+        return response;
     }
 
     /**

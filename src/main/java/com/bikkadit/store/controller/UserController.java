@@ -1,6 +1,7 @@
 package com.bikkadit.store.controller;
 
 import com.bikkadit.store.dto.ApiResponseMessage;
+import com.bikkadit.store.dto.PageableResponse;
 import com.bikkadit.store.dto.UserDto;
 import com.bikkadit.store.service.UserService;
 import org.slf4j.Logger;
@@ -75,10 +76,17 @@ public class UserController
      * @return
      */
     @GetMapping("/")
-    public ResponseEntity<List<UserDto>>getAllUsers()
+    public ResponseEntity<PageableResponse<UserDto>>getAllUsers(
+            @RequestParam(value = "pageNumber",defaultValue = "0",required = false) int pageNumber,
+            @RequestParam(value = "pageSize",defaultValue = "10",required = false) int pageSize,
+            @RequestParam(value = "sortBy",defaultValue = "ASC",required = false)String sortBy,
+            @RequestParam(value = "sortDir",defaultValue = "DEC",required = false) String sortDir
+    )
     {
         LOGGER.info("Inside getALlUsers()");
-        return new ResponseEntity<>(userService.getAllUser(), HttpStatus.OK);
+        PageableResponse<UserDto> allUserDtos = userService.getAllUser(pageNumber, pageSize, sortBy, sortDir);
+        LOGGER.info("Complete Request For Getting All Users");
+        return new ResponseEntity<>(allUserDtos, HttpStatus.OK);
     }
 
     /**
