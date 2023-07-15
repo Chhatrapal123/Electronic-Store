@@ -1,5 +1,6 @@
 package com.bikkadit.store.service.impl;
 
+import com.bikkadit.store.Constant.AppConstant;
 import com.bikkadit.store.exception.BadApiRequest;
 import com.bikkadit.store.service.FileService;
 import org.slf4j.Logger;
@@ -25,7 +26,7 @@ public class FileServiceImpl implements FileService
         String filename= UUID.randomUUID().toString();
         String extension = originalFilename.substring(originalFilename.lastIndexOf("."));
         String fileNameWithExtension = filename + extension;
-        String fullPathWithFileName = path + File.separator + fileNameWithExtension;
+        String fullPathWithFileName = path  + fileNameWithExtension;
         if(extension.equalsIgnoreCase(".png") || extension.equalsIgnoreCase(".jpeg") || extension.equalsIgnoreCase(".jpg"))
         {
             // FIle save
@@ -42,7 +43,7 @@ public class FileServiceImpl implements FileService
             return fileNameWithExtension;
 
         }else{
-            throw new BadApiRequest("File with This "+ extension+ "not Allowed");
+            throw new BadApiRequest(AppConstant.EXTENSION + extension);
         }
     }
 
@@ -52,10 +53,11 @@ public class FileServiceImpl implements FileService
         LOGGER.info("Inside getResource()");
 
         String fullPath = path + File.separator+name;
+        LOGGER.info("full path:{}",fullPath);
 
         InputStream inputStream = new FileInputStream(fullPath);
 
-        LOGGER.info("Completed Request For getResource "+ inputStream);
+        LOGGER.info("Completed Request For getResource ");
 
         return inputStream;
     }

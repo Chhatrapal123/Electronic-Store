@@ -6,18 +6,24 @@ import com.bikkadit.store.dto.UserDto;
 import com.bikkadit.store.entity.User;
 import com.bikkadit.store.exception.ResourceNotFoundException;
 import com.bikkadit.store.helper.Helper;
-import com.bikkadit.store.repository.UserRepo;
+import com.bikkadit.store.repository.UserRepository;
 import com.bikkadit.store.service.UserService;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -26,11 +32,13 @@ import java.util.stream.Collectors;
 public class UserServiceImpl implements UserService
 {
     @Autowired
-    private UserRepo userRepo;
+    private UserRepository userRepository;
 
     @Autowired
     private ModelMapper mapper;
 
+    @Value("${user.profile.image.path}")
+    private String imagePath;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UserServiceImpl.class);
 
@@ -50,10 +58,10 @@ public class UserServiceImpl implements UserService
 
         // dto -> entity
         User user = dtoToEntity(userDto);
-        User savedUser = userRepo.save(user);
+        User savedUser = userRepository.save(user);
         //entity -> dto
         UserDto newDto = entityToDto(savedUser);
-        LOGGER.info("Completed Request For Saving The User "+ newDto);
+        LOGGER.info("Completed Request For Saving The User ");
         return newDto;
     }
 
@@ -66,17 +74,17 @@ public class UserServiceImpl implements UserService
     @Override
     public UserDto updateUser(UserDto userDto, String userId)
     {
-        LOGGER.info("Inside updateUser() Fetching User For userId :"+ userId);
-        User user = userRepo.findById(userId).orElseThrow(() -> new ResourceNotFoundException(AppConstant.USER_NOT_FOUND));
-        LOGGER.info("Fetched User is: "+ user);
+        LOGGER.info("Inside updateUser() Fetching User For userId ");
+        User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException(AppConstant.USER_NOT_FOUND));
+        LOGGER.info("Fetched User successfully ");
         user.setName(userDto.getName());
         user.setAbout(userDto.getAbout());
         user.setGender(userDto.getGender());
         user.setPassword(userDto.getPassword());
         user.setImageName(userDto.getImageName());
-        User updatedUser = userRepo.save(user);
+        User updatedUser = userRepository.save(user);
         UserDto updatedDto = entityToDto(updatedUser);
-        LOGGER.info("Completed Request For Updating The User  "+updatedDto);
+        LOGGER.info("Completed Request For Updating The User  ");
         return updatedDto;
     }
 
@@ -87,10 +95,25 @@ public class UserServiceImpl implements UserService
     @Override
     public void deleteUser(String userId)
     {
-        LOGGER.info("Inside deleteUser() for id "+userId);
-        User user = userRepo.findById(userId).orElseThrow(() -> new ResourceNotFoundException(AppConstant.USER_NOT_FOUND));
-        LOGGER.info("Completed Request to Delete User : "+user);
-        userRepo.delete(user);
+        LOGGER.info("Fetching for deleteUser()");
+        User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException(AppConstant.USER_NOT_FOUND));
+       // delete user profile image
+        String fullPath = imagePath + user.getImageName();
+        try
+        {
+            Path path = Paths.get(fullPath);
+            Files.delete(path);
+        }catch (NoSuchFileException ex)
+        {
+            LOGGER.info("User Image Not Found In FOlder");
+            ex.printStackTrace();
+        }catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+        // delete User
+        LOGGER.info("Completed Request to Delete User");
+        userRepository.delete(user);
     }
 
     /**
@@ -100,10 +123,10 @@ public class UserServiceImpl implements UserService
     @Override
     public PageableResponse<UserDto> getAllUser(int pageNumber,int pageSize,String sortBy,String sortDir)
     {
-        LOGGER.info("Inside getAllUser()");
+        LOGGER.info("Fetching data Inside getAllUser()");
         Sort sort = sortDir.equalsIgnoreCase("asc")?Sort.by(sortBy).ascending():Sort.by(sortBy).descending();
-        Pageable pageable = PageRequest.of(pageNumber-1,pageSize,sort);
-        Page<User> page = userRepo.findAll(pageable);
+        Pageable pageable = PageRequest.of(pageNumber,pageSize,sort);
+        Page<User> page = userRepository.findAll(pageable);
 
         PageableResponse<UserDto> response = Helper.getPageableResponse(page, UserDto.class);
 
@@ -118,7 +141,7 @@ public class UserServiceImpl implements UserService
 //                .content(dtoList)
 //                .totalElement(page.getTotalElements())
 //                .build();
-        LOGGER.info("Completed Request for Fetching List Of Users: "+response);
+        LOGGER.info("Completed Request for Fetching List Of Users");
         return response;
     }
 
@@ -130,9 +153,9 @@ public class UserServiceImpl implements UserService
     @Override
     public UserDto getUserById(String userId)
     {
-        LOGGER.info("Inside getUserById() For User Id: "+userId);
-        User user = userRepo.findById(userId).orElseThrow(() -> new ResourceNotFoundException(AppConstant.USER_NOT_FOUND));
-        LOGGER.info("Completed Request for Fetching User with Id: "+user);
+        LOGGER.info("Inside getUserById() For User Id");
+        User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException(AppConstant.USER_NOT_FOUND));
+        LOGGER.info("Completed Request for Fetching User with Id");
         return entityToDto(user);
     }
 
@@ -144,9 +167,9 @@ public class UserServiceImpl implements UserService
     @Override
     public UserDto getUserByEmail(String email)
     {
-        LOGGER.info("Inside getUserByEmail() For Email: "+email);
-        User user = userRepo.findByEmail(email).orElseThrow(() -> new ResourceNotFoundException(AppConstant.EMAIL_NOT_FOUND));
-        LOGGER.info("Completed Request for Fetching User By email: "+user);
+        LOGGER.info("Inside getUserByEmail() For Email");
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new ResourceNotFoundException(AppConstant.EMAIL_NOT_FOUND));
+        LOGGER.info("Completed Request for Fetching User By email");
         return entityToDto(user);
     }
 
@@ -158,10 +181,10 @@ public class UserServiceImpl implements UserService
     @Override
     public List<UserDto> searchUser(String keyword)
     {
-        LOGGER.info("Inside searchUser() For keyword: "+keyword);
-        List<User> users = userRepo.findByNameContaining(keyword);
+        LOGGER.info("Inside searchUser() For keyword ");
+        List<User> users = userRepository.findByNameContaining(keyword);
         List<UserDto> dtoList = users.stream().map(user -> entityToDto(user)).collect(Collectors.toList());
-        LOGGER.info("Completed Request for Fetching User details :"+dtoList);
+        LOGGER.info("Completed Request for Fetching User details ");
         return dtoList;
     }
 

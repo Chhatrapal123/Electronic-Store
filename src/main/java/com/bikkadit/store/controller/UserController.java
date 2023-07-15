@@ -1,17 +1,27 @@
 package com.bikkadit.store.controller;
 
+import com.bikkadit.store.Constant.AppConstant;
 import com.bikkadit.store.dto.ApiResponseMessage;
+import com.bikkadit.store.dto.ImageResponse;
 import com.bikkadit.store.dto.PageableResponse;
 import com.bikkadit.store.dto.UserDto;
+import com.bikkadit.store.service.FileService;
 import com.bikkadit.store.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StreamUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 @RestController
@@ -21,6 +31,11 @@ public class UserController
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private FileService fileService;
+
+    @Value("${user.profile.image.path}")
+    private String imageUploadPath;
     private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
     /**
      * @apiNote Create User
@@ -63,7 +78,7 @@ public class UserController
         userService.deleteUser(userId);
         ApiResponseMessage message = ApiResponseMessage
                 .builder()
-                .message("User is deleted successfully!!")
+                .message(AppConstant.DELETE_USER)
                 .success(true)
                 .status(HttpStatus.OK)
                 .build();
@@ -77,15 +92,15 @@ public class UserController
      */
     @GetMapping("/")
     public ResponseEntity<PageableResponse<UserDto>>getAllUsers(
-            @RequestParam(value = "pageNumber",defaultValue = "0",required = false) int pageNumber,
+            @RequestParam(value = "pageNumber",defaultValue = "0",required = false) int pageNumber ,
             @RequestParam(value = "pageSize",defaultValue = "10",required = false) int pageSize,
-            @RequestParam(value = "sortBy",defaultValue = "ASC",required = false)String sortBy,
-            @RequestParam(value = "sortDir",defaultValue = "DEC",required = false) String sortDir
+            @RequestParam(value = "sortBy",defaultValue = "name",required = false)String sortBy,
+            @RequestParam(value = "sortDir",defaultValue = "asc",required = false) String sortDir
     )
     {
         LOGGER.info("Inside getALlUsers()");
         PageableResponse<UserDto> allUserDtos = userService.getAllUser(pageNumber, pageSize, sortBy, sortDir);
-        LOGGER.info("Complete Request For Getting All Users");
+        LOGGER.info("Completed the Request For Getting All Users");
         return new ResponseEntity<>(allUserDtos, HttpStatus.OK);
     }
 
@@ -123,5 +138,43 @@ public class UserController
     {
         LOGGER.info("Inside searchUser()");
         return new ResponseEntity(userService.searchUser(keywords), HttpStatus.OK);
+    }
+
+
+    /**
+     * @apiNote upload user image
+     * @param image
+     * @param userId
+     * @return
+     * @throws IOException
+     */
+    @PostMapping("/image/{userId}")
+    public ResponseEntity<ImageResponse>uploadUserImage(@RequestParam("userImage")MultipartFile image, @PathVariable String userId) throws IOException
+    {
+        LOGGER.info("Inside uploadUserImage()");
+        String imageName = fileService.uploadFile(image, imageUploadPath);
+
+        UserDto user = userService.getUserById(userId);
+
+        user.setImageName(imageName);
+
+        UserDto userDto = userService.updateUser(user, userId);
+
+        ImageResponse imageResponse = ImageResponse.builder().imageName(imageName).message(AppConstant.IMAGE_UPLOAD).success(true).status(HttpStatus.CREATED).build();
+        LOGGER.info("Completed request for uploadUserImage()");
+        return new ResponseEntity<>(imageResponse,HttpStatus.CREATED);
+    }
+
+    //Serve User Image
+    @GetMapping("/image/{userId}")
+    public void serveUserImage(@PathVariable String userId, HttpServletResponse response) throws IOException
+    {
+        //
+        LOGGER.info("Inside serveUserImage()");
+        UserDto user = userService.getUserById(userId);
+        LOGGER.info("User image name: ",user.getImageName());
+        InputStream resource = fileService.getResource(imageUploadPath, user.getImageName());
+        response.setContentType(MediaType.IMAGE_JPEG_VALUE);
+        StreamUtils.copy(resource,response.getOutputStream());
     }
 }
