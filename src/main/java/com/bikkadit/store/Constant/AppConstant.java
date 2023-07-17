@@ -9,4 +9,6 @@ public class AppConstant
     public static final String DELETE_USER = "User Deleted Successfully." ;
     public  static final String CATEGORY_NOT_FOUND = "Category not found with given category Id";
     public static final String DELETE_CATEGORY = "Category Deleted Successfully";
+    public static final String PRODUCT_NOT_FOUND = "Product not Found with given Id";
+    public static final String DELETE_PRODUCT = "Product is Deleted Successfully";
 }

@@ -149,6 +149,8 @@ public class CategoryController
         CategoryDto category = categoryService.getCategory(categoryId);
         category.setCoverImage(coverImage);
         categoryService.update(category, categoryId);
+
+
         ImageResponse imageResponse = ImageResponse.builder().imageName(coverImage).message(AppConstant.IMAGE_UPLOAD).success(true).status(HttpStatus.CREATED).build();
         LOGGER.info("Completed request for uploadCategoryImage()");
         return new ResponseEntity<>(imageResponse,HttpStatus.CREATED);
