@@ -93,7 +93,7 @@ public class UserServiceImpl implements UserService
     @Override
     public void deleteUser(String userId)
     {
-        LOGGER.info("Fetching to deleteUser() for userId: {}",userId);
+        LOGGER.info("Inside deleteUser() for userId: {}",userId);
         User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException(AppConstant.USER_NOT_FOUND));
        // delete user profile image
         String fullPath = imagePath + user.getImageName();
@@ -121,7 +121,7 @@ public class UserServiceImpl implements UserService
     @Override
     public PageableResponse<UserDto> getAllUser(int pageNumber,int pageSize,String sortBy,String sortDir)
     {
-        LOGGER.info("Fetching data Inside getAllUser()");
+        LOGGER.info("Inside getAllUser()");
         Sort sort = sortDir.equalsIgnoreCase("asc")?Sort.by(sortBy).ascending():Sort.by(sortBy).descending();
         Pageable pageable = PageRequest.of(pageNumber,pageSize,sort);
         Page<User> page = userRepository.findAll(pageable);

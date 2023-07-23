@@ -49,7 +49,7 @@ public class CategoryServiceImpl implements CategoryService
     public CategoryDto update(CategoryDto categoryDto, String categoryId)
     {
         //get category for given id
-        LOGGER.info("Fetching request for updateCategory() for categoryId: {}",categoryId);
+        LOGGER.info("Fetching request for updateCategory() on categoryId: {}",categoryId);
         Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException(AppConstant.CATEGORY_NOT_FOUND));
         // update category details
         category.setTitle(categoryDto.getTitle());
@@ -63,7 +63,7 @@ public class CategoryServiceImpl implements CategoryService
     @Override
     public void delete(String categoryId)
     {
-        LOGGER.info("Fetching request for delete() category for categoryId: {}",categoryId);
+        LOGGER.info("Fetching request for delete() category on categoryId: {}",categoryId);
         Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException(AppConstant.DELETE_CATEGORY));
         categoryRepository.delete(category);
         LOGGER.info("Request Fetched Successfully to delete() category for categoryId: {}",categoryId);
@@ -84,7 +84,7 @@ public class CategoryServiceImpl implements CategoryService
     @Override
     public CategoryDto getCategory(String categoryId)
     {
-        LOGGER.info("Fetching request for getCategory() for categoryId: {}",categoryId);
+        LOGGER.info("Fetching request for getCategory() on categoryId: {}",categoryId);
         Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException(AppConstant.CATEGORY_NOT_FOUND));
         LOGGER.info("Request Fetching Successfully to getCategory() for categoryId: {}",categoryId);
         return mapper.map(category, CategoryDto.class);
@@ -93,7 +93,7 @@ public class CategoryServiceImpl implements CategoryService
     @Override
     public List<CategoryDto> searchCategory(String keyword)
     {
-        LOGGER.info("Fetching Request for searchCategory() for keyword: {}",keyword);
+        LOGGER.info("Fetching Request for searchCategory() on keyword: {}",keyword);
         List<Category> category = categoryRepository.findByTitleContaining(keyword);
         List<CategoryDto> categoryDtos = category.stream().map(category1 -> mapper.map(category1, CategoryDto.class)).collect(Collectors.toList());
         LOGGER.info("Request Fetched Successfully to searchCategory() for keyword: {}",keyword);

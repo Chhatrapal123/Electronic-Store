@@ -21,6 +21,7 @@ public class FileServiceImpl implements FileService
     @Override
     public String uploadFile(MultipartFile file, String path) throws IOException
     {
+        LOGGER.info("Fetching request to uploadFile() for file: {}",file);
         String originalFilename = file.getOriginalFilename();
         LOGGER.info("Filename: {}",originalFilename);
         String filename= UUID.randomUUID().toString();
@@ -39,7 +40,7 @@ public class FileServiceImpl implements FileService
 
             // upload file
             Files.copy(file.getInputStream(), Paths.get(fullPathWithFileName));
-            LOGGER.info("Completed Request For upload File");
+            LOGGER.info("Completed Request For upload File: {}",file);
             return fileNameWithExtension;
 
         }else{
@@ -50,14 +51,14 @@ public class FileServiceImpl implements FileService
     @Override
     public InputStream getResource(String path, String name) throws FileNotFoundException
     {
-        LOGGER.info("Inside getResource()");
+        LOGGER.info("Fetching request Inside getResource() for path: {}",path);
 
         String fullPath = path + File.separator+name;
         LOGGER.info("full path:{}",fullPath);
 
         InputStream inputStream = new FileInputStream(fullPath);
 
-        LOGGER.info("Completed Request For getResource ");
+        LOGGER.info("Completed Request For getResource() ");
 
         return inputStream;
     }
