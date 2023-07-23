@@ -41,32 +41,32 @@ public class CategoryServiceImpl implements CategoryService
         categoryDto.setCategoryId(categoryId);
         Category category = mapper.map(categoryDto, Category.class);
         Category savedCategory = categoryRepository.save(category);
-        LOGGER.info("Request Fetched Successfully for create category");
+        LOGGER.info("Request Fetched Successfully to create category for categoryId: {}",categoryId);
         return mapper.map(savedCategory, CategoryDto.class);
     }
 
-    @Override
+     @Override
     public CategoryDto update(CategoryDto categoryDto, String categoryId)
     {
         //get category for given id
-        LOGGER.info("Fetching request for updateCategory()");
+        LOGGER.info("Fetching request for updateCategory() for categoryId: {}",categoryId);
         Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException(AppConstant.CATEGORY_NOT_FOUND));
         // update category details
         category.setTitle(categoryDto.getTitle());
         category.setDescription(categoryDto.getDescription());
         category.setCoverImage(categoryDto.getCoverImage());
         Category updatedCategory = categoryRepository.save(category);
-        LOGGER.info("Request Fetched Successfully for updateCategory()");
+        LOGGER.info("Request Fetched Successfully to updateCategory() for categoryId: {}",categoryId);
         return mapper.map(updatedCategory, CategoryDto.class);
     }
 
     @Override
     public void delete(String categoryId)
     {
-        LOGGER.info("Fetching request for delete() category");
+        LOGGER.info("Fetching request for delete() category for categoryId: {}",categoryId);
         Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException(AppConstant.DELETE_CATEGORY));
         categoryRepository.delete(category);
-        LOGGER.info("Rquest Fetched Successfully for delete() category");
+        LOGGER.info("Request Fetched Successfully to delete() category for categoryId: {}",categoryId);
     }
 
     @Override
@@ -84,19 +84,19 @@ public class CategoryServiceImpl implements CategoryService
     @Override
     public CategoryDto getCategory(String categoryId)
     {
-        LOGGER.info("Fetching request for getCategory()");
+        LOGGER.info("Fetching request for getCategory() for categoryId: {}",categoryId);
         Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException(AppConstant.CATEGORY_NOT_FOUND));
-        LOGGER.info("Request Fetching Successfully for getCategory()");
+        LOGGER.info("Request Fetching Successfully to getCategory() for categoryId: {}",categoryId);
         return mapper.map(category, CategoryDto.class);
     }
 
     @Override
     public List<CategoryDto> searchCategory(String keyword)
     {
-        LOGGER.info("Fetching Request for searchCategory()");
+        LOGGER.info("Fetching Request for searchCategory() for keyword: {}",keyword);
         List<Category> category = categoryRepository.findByTitleContaining(keyword);
         List<CategoryDto> categoryDtos = category.stream().map(category1 -> mapper.map(category1, CategoryDto.class)).collect(Collectors.toList());
-        LOGGER.info("Request Fetched Successfully for searchCategory()");
+        LOGGER.info("Request Fetched Successfully to searchCategory() for keyword: {}",keyword);
         return categoryDtos;
     }
 }
