@@ -53,15 +53,13 @@ public class UserServiceImpl implements UserService
         LOGGER.info("Inside createUser()");
         //generate unique id in String Format
         String userId = UUID.randomUUID().toString();
-        LOGGER.info("Generated unique Id: "+ userId);
         userDto.setUserId(userId);
-
         // dto -> entity
         User user = dtoToEntity(userDto);
         User savedUser = userRepository.save(user);
         //entity -> dto
         UserDto newDto = entityToDto(savedUser);
-        LOGGER.info("Completed Request For Saving The User ");
+        LOGGER.info("Completed Request to Saving The User for UserId: {} ",userId);
         return newDto;
     }
 
@@ -74,7 +72,7 @@ public class UserServiceImpl implements UserService
     @Override
     public UserDto updateUser(UserDto userDto, String userId)
     {
-        LOGGER.info("Inside updateUser() Fetching User For userId ");
+        LOGGER.info("Inside updateUser() Fetching User For userId: {}",userId);
         User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException(AppConstant.USER_NOT_FOUND));
         LOGGER.info("Fetched User successfully ");
         user.setName(userDto.getName());
@@ -84,7 +82,7 @@ public class UserServiceImpl implements UserService
         user.setImageName(userDto.getImageName());
         User updatedUser = userRepository.save(user);
         UserDto updatedDto = entityToDto(updatedUser);
-        LOGGER.info("Completed Request For Updating The User  ");
+        LOGGER.info("Completed Request to Updating The User for UserId: {}",userId);
         return updatedDto;
     }
 
@@ -95,7 +93,7 @@ public class UserServiceImpl implements UserService
     @Override
     public void deleteUser(String userId)
     {
-        LOGGER.info("Fetching for deleteUser()");
+        LOGGER.info("Fetching to deleteUser() for userId: {}",userId);
         User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException(AppConstant.USER_NOT_FOUND));
        // delete user profile image
         String fullPath = imagePath + user.getImageName();
@@ -105,14 +103,14 @@ public class UserServiceImpl implements UserService
             Files.delete(path);
         }catch (NoSuchFileException ex)
         {
-            LOGGER.info("User Image Not Found In FOlder");
+            LOGGER.info("User Image Not Found In Folder");
             ex.printStackTrace();
         }catch (IOException e)
         {
             e.printStackTrace();
         }
         // delete User
-        LOGGER.info("Completed Request to Delete User");
+        LOGGER.info("Completed Request to Delete User for userId: {}",userId);
         userRepository.delete(user);
     }
 
@@ -153,9 +151,9 @@ public class UserServiceImpl implements UserService
     @Override
     public UserDto getUserById(String userId)
     {
-        LOGGER.info("Inside getUserById() For User Id");
+        LOGGER.info("Inside getUserById() For UserId: {}",userId);
         User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException(AppConstant.USER_NOT_FOUND));
-        LOGGER.info("Completed Request for Fetching User with Id");
+        LOGGER.info("Completed Request to Fetching UserById for userId: {}",userId);
         return entityToDto(user);
     }
 
@@ -167,9 +165,9 @@ public class UserServiceImpl implements UserService
     @Override
     public UserDto getUserByEmail(String email)
     {
-        LOGGER.info("Inside getUserByEmail() For Email");
+        LOGGER.info("Inside getUserByEmail() For Email: {}",email);
         User user = userRepository.findByEmail(email).orElseThrow(() -> new ResourceNotFoundException(AppConstant.EMAIL_NOT_FOUND));
-        LOGGER.info("Completed Request for Fetching User By email");
+        LOGGER.info("Completed Request for Fetching User By email: {}",email);
         return entityToDto(user);
     }
 
@@ -181,10 +179,10 @@ public class UserServiceImpl implements UserService
     @Override
     public List<UserDto> searchUser(String keyword)
     {
-        LOGGER.info("Inside searchUser() For keyword ");
+        LOGGER.info("Inside searchUser() For keyword: {}");
         List<User> users = userRepository.findByNameContaining(keyword);
         List<UserDto> dtoList = users.stream().map(user -> entityToDto(user)).collect(Collectors.toList());
-        LOGGER.info("Completed Request for Fetching User details ");
+        LOGGER.info("Completed Request for Fetching User details by keyword: {}",keyword);
         return dtoList;
     }
 
