@@ -96,20 +96,20 @@ public class  ProductController {
         return new ResponseEntity<>(pageableResponse, HttpStatus.OK);
     }
 
-//    //Search All
-//    @GetMapping("/search/{query}")
-//    public ResponseEntity<PageableResponse<ProductDto>> searchProduct(
-//            @RequestParam(value = "pageNumber", defaultValue = "0", required = false) int pageNumber,
-//            @RequestParam(value = "pageSize", defaultValue = "10", required = false) int pageSize,
-//            @RequestParam(value = "sortBy", defaultValue = "title", required = false) String sortBy,
-//            @RequestParam(value = "sortDir", defaultValue = "desc", required = false) String sortDir)
-//    {
-//        LOGGER.info("Initialze searchProduct()");
-//        PageableResponse<ProductDto> pageableResponse = productService.getAll(pageNumber, pageSize, sortBy, sortDir);
-//        LOGGER.info("Complete Request For searchProduct()");
-//        return new ResponseEntity<>(pageableResponse,HttpStatus.OK);
-//    }
-//
+    //Search All
+    @GetMapping("/search/{query}")
+    public ResponseEntity<PageableResponse<ProductDto>> searchProduct(
+            @RequestParam(value = "pageNumber", defaultValue = "0", required = false) int pageNumber,
+            @RequestParam(value = "pageSize", defaultValue = "10", required = false) int pageSize,
+            @RequestParam(value = "sortBy", defaultValue = "title", required = false) String sortBy,
+            @RequestParam(value = "sortDir", defaultValue = "desc", required = false) String sortDir)
+    {
+        LOGGER.info("Initialze searchProduct()");
+        PageableResponse<ProductDto> pageableResponse = productService.getAll(pageNumber, pageSize, sortBy, sortDir);
+        LOGGER.info("Complete Request For searchProduct()");
+        return new ResponseEntity<>(pageableResponse,HttpStatus.OK);
+    }
+
 //    //upload image
 //    @PostMapping("/image/{productId}")
 //    public ResponseEntity<ImageResponse>uploadProductImage(@PathVariable String productId, @RequestParam("productImage")MultipartFile image) throws IOException {
