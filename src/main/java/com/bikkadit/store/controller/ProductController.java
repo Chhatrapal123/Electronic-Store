@@ -124,14 +124,14 @@ public class  ProductController {
         LOGGER.info("Complete Request For uploadProductImage()");
         return new ResponseEntity<>(response,HttpStatus.CREATED);
     }
-//    //Serve image
-//    @GetMapping("/iamge/{productId}")
-//    public  void serveUserImage(@PathVariable String productId, HttpServletResponse response) throws IOException {
-//        LOGGER.info("Initialize serveUserImage()");
-//        ProductDto productDto = productService.get(productId);
-//        InputStream resource = fileService.getResource(imagePath, productDto.getProductImageName());
-//        response.setContentType(MediaType.IMAGE_JPEG_VALUE);
-//        StreamUtils.copy(resource,response.getOutputStream());
-//    }
+    //Serve image
+    @GetMapping("/iamge/{productId}")
+    public  void serveUserImage(@PathVariable String productId, HttpServletResponse response) throws IOException {
+        LOGGER.info("Initialize serveUserImage()");
+        ProductDto productDto = productService.get(productId);
+        InputStream resource = fileService.getResource(imagePath, productDto.getProductImageName());
+        response.setContentType(MediaType.IMAGE_JPEG_VALUE);
+        StreamUtils.copy(resource,response.getOutputStream());
+    }
 
 }
