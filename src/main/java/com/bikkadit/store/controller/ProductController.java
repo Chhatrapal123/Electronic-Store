@@ -110,20 +110,20 @@ public class  ProductController {
         return new ResponseEntity<>(pageableResponse,HttpStatus.OK);
     }
 
-//    //upload image
-//    @PostMapping("/image/{productId}")
-//    public ResponseEntity<ImageResponse>uploadProductImage(@PathVariable String productId, @RequestParam("productImage")MultipartFile image) throws IOException {
-//        LOGGER.info("Initialize uploadProductImage()");
-//        String fileName = fileService.uploadFile(image, imagePath);
-//        ProductDto productDto = productService.get(productId);
-//        productDto.setProductImageName(fileName);
-//        ProductDto updatedProduct = productService.update(productDto, productId);
-//        ImageResponse response = ImageResponse.builder().imageName(updatedProduct.getProductImageName())
-//                .message(AppConstant.IMAGE_UPLOAD).status(HttpStatus.CREATED)
-//                .success(true).build();
-//        LOGGER.info("Complete Request For uploadProductImage()");
-//        return new ResponseEntity<>(response,HttpStatus.CREATED);
-//    }
+    //upload image
+    @PostMapping("/image/{productId}")
+    public ResponseEntity<ImageResponse>uploadProductImage(@PathVariable String productId, @RequestParam("productImage")MultipartFile image) throws IOException {
+        LOGGER.info("Initialize uploadProductImage()");
+        String fileName = fileService.uploadFile(image, imagePath);
+        ProductDto productDto = productService.get(productId);
+        productDto.setProductImageName(fileName);
+        ProductDto updatedProduct = productService.update(productDto, productId);
+        ImageResponse response = ImageResponse.builder().imageName(updatedProduct.getProductImageName())
+                .message(AppConstant.IMAGE_UPLOAD).status(HttpStatus.CREATED)
+                .success(true).build();
+        LOGGER.info("Complete Request For uploadProductImage()");
+        return new ResponseEntity<>(response,HttpStatus.CREATED);
+    }
 //    //Serve image
 //    @GetMapping("/iamge/{productId}")
 //    public  void serveUserImage(@PathVariable String productId, HttpServletResponse response) throws IOException {
