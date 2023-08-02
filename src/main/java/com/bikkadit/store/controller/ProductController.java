@@ -58,14 +58,14 @@ public class  ProductController {
     @DeleteMapping("/{productId}")
     public ResponseEntity<ApiResponseMessage> deleteProduct(@PathVariable String productId, @RequestBody ProductDto productDto)
     {
-        LOGGER.info("Initialize deleteProduct()");
+        LOGGER.info("Initialize deleteProduct() for productId :"+ productId);
         productService.delete(productId);
         ApiResponseMessage responseMessage = ApiResponseMessage.builder()
                 .message(AppConstant.DELETE_PRODUCT)
                 .success(true)
                 .status(HttpStatus.OK)
                 .build();
-        LOGGER.info("Completed Request For deleteProduct()");
+        LOGGER.info("Completed Request For deleteProduct() with productId :" + productId);
         return new ResponseEntity<>(responseMessage, HttpStatus.OK);
     }
 
