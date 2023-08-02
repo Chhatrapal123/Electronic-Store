@@ -41,7 +41,7 @@ public class  ProductController {
     public ResponseEntity<ProductDto> createProduct(@RequestBody ProductDto productDto) {
         LOGGER.info("Initialize createProduct()");
         ProductDto createdProduct = productService.create(productDto);
-        LOGGER.info("Complete Request For createProduct()");
+        LOGGER.info("Completed Request For createProduct()");
         return new ResponseEntity<>(createdProduct, HttpStatus.OK);
     }
 
