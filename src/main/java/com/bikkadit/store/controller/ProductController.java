@@ -48,9 +48,9 @@ public class  ProductController {
     //update
     @PutMapping("/{productId}")
     public ResponseEntity<ProductDto> updateProduct(@PathVariable String productId, @RequestBody ProductDto productDto) {
-        LOGGER.info("Initialize updateProduct()");
+        LOGGER.info("Initialize updateProduct() for productId: "+ productId);
         ProductDto updatedProduct = productService.update(productDto, productId);
-        LOGGER.info("Complete Request For updateProduct()");
+        LOGGER.info("Complete Request For updateProduct() with productId :"+productId);
         return new ResponseEntity<>(updatedProduct, HttpStatus.CREATED);
     }
 
