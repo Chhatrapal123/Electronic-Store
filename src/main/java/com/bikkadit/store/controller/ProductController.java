@@ -104,9 +104,9 @@ public class  ProductController {
             @RequestParam(value = "sortBy", defaultValue = "title", required = false) String sortBy,
             @RequestParam(value = "sortDir", defaultValue = "desc", required = false) String sortDir)
     {
-        LOGGER.info("Initialze searchProduct()");
+        LOGGER.info("Initialize searchProduct()");
         PageableResponse<ProductDto> pageableResponse = productService.getAll(pageNumber, pageSize, sortBy, sortDir);
-        LOGGER.info("Complete Request For searchProduct()");
+        LOGGER.info("Completed Request For searchProduct()");
         return new ResponseEntity<>(pageableResponse,HttpStatus.OK);
     }
 
