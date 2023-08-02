@@ -78,7 +78,7 @@ public class  ProductController {
             @RequestParam(value = "asc", defaultValue = "asc", required = false) String sortDir) {
         LOGGER.info("Initialize getAll()");
         PageableResponse<ProductDto> pageableResponse = productService.getAll(pageNumber, pageSize, sortBy, sortDir);
-        LOGGER.info("Complete Request For getAll()");
+        LOGGER.info("Completed Request For getAll()");
         return new ResponseEntity<>(pageableResponse, HttpStatus.OK);
     }
 
