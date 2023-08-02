@@ -92,7 +92,7 @@ public class  ProductController {
             @RequestParam(value = "asc", defaultValue = "asc", required = false) String sortDir) {
         LOGGER.info("Initialize getAllLive()");
         PageableResponse<ProductDto> pageableResponse = productService.getAllLive(pageNumber, pageSize, sortBy, sortDir);
-        LOGGER.info("Complete Request for getAllLive()");
+        LOGGER.info("Completed Request for getAllLive()");
         return new ResponseEntity<>(pageableResponse, HttpStatus.OK);
     }
 
