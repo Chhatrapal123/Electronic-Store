@@ -53,21 +53,21 @@ public class  ProductController {
         LOGGER.info("Complete Request For updateProduct()");
         return new ResponseEntity<>(updatedProduct, HttpStatus.CREATED);
     }
-//
-//    //delete
-//    @DeleteMapping("/{productId}")
-//    public ResponseEntity<ApiResponseMessage> deleteProduct(@PathVariable String productId, @RequestBody ProductDto productDto)
-//    {
-//        LOGGER.info("Initialize deleteProduct()");
-//        productService.delete(productId);
-//        ApiResponseMessage responseMessage = ApiResponseMessage.builder()
-//                .message(AppConstant.DELETE_PRODUCT)
-//                .success(true)
-//                .status(HttpStatus.OK)
-//                .build();
-//        LOGGER.info("Completed Request For deleteProduct()");
-//        return new ResponseEntity<>(responseMessage, HttpStatus.OK);
-//    }
+
+    //delete
+    @DeleteMapping("/{productId}")
+    public ResponseEntity<ApiResponseMessage> deleteProduct(@PathVariable String productId, @RequestBody ProductDto productDto)
+    {
+        LOGGER.info("Initialize deleteProduct()");
+        productService.delete(productId);
+        ApiResponseMessage responseMessage = ApiResponseMessage.builder()
+                .message(AppConstant.DELETE_PRODUCT)
+                .success(true)
+                .status(HttpStatus.OK)
+                .build();
+        LOGGER.info("Completed Request For deleteProduct()");
+        return new ResponseEntity<>(responseMessage, HttpStatus.OK);
+    }
 //
 //    //getAll
 //    @GetMapping
