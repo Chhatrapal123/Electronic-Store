@@ -68,20 +68,20 @@ public class  ProductController {
         LOGGER.info("Completed Request For deleteProduct()");
         return new ResponseEntity<>(responseMessage, HttpStatus.OK);
     }
-//
-//    //getAll
-//    @GetMapping
-//    public ResponseEntity<PageableResponse<ProductDto>> getAll(
-//            @RequestParam(value = "pageNumber", defaultValue = "0", required = false) int pageNumber,
-//            @RequestParam(value = "pageSize", defaultValue = "10", required = false) int pageSize,
-//            @RequestParam(value = "sortBy", defaultValue = "title", required = false) String sortBy,
-//            @RequestParam(value = "asc", defaultValue = "asc", required = false) String sortDir) {
-//        LOGGER.info("Initialize getAll()");
-//        PageableResponse<ProductDto> pageableResponse = productService.getAll(pageNumber, pageSize, sortBy, sortDir);
-//        LOGGER.info("Complete Request For getAll()");
-//        return new ResponseEntity<>(pageableResponse, HttpStatus.OK);
-//    }
-//
+
+    //getAll
+    @GetMapping
+    public ResponseEntity<PageableResponse<ProductDto>> getAll(
+            @RequestParam(value = "pageNumber", defaultValue = "0", required = false) int pageNumber,
+            @RequestParam(value = "pageSize", defaultValue = "10", required = false) int pageSize,
+            @RequestParam(value = "sortBy", defaultValue = "title", required = false) String sortBy,
+            @RequestParam(value = "asc", defaultValue = "asc", required = false) String sortDir) {
+        LOGGER.info("Initialize getAll()");
+        PageableResponse<ProductDto> pageableResponse = productService.getAll(pageNumber, pageSize, sortBy, sortDir);
+        LOGGER.info("Complete Request For getAll()");
+        return new ResponseEntity<>(pageableResponse, HttpStatus.OK);
+    }
+
 //    //get all live
 //    //product/live
 //    @GetMapping("/live")
