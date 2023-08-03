@@ -131,16 +131,16 @@ public class UserServiceTest
 
         Mockito.when(userRepository.findById(Mockito.anyString())).thenReturn(Optional.of(user));
         // actual call of service method
-        UserDto id = userService.getUserById(userId);
+        UserDto userDto = userService.getUserById(userId);
 
-        Assertions.assertNotNull(id);
-        Assertions.assertEquals(user.getName(),id.getName(),"name not matched");
+        Assertions.assertNotNull(userDto);
+        Assertions.assertEquals(user.getName(),userDto.getName(),"name not matched");
     }
 
     public void getUserByEmailTest()
     {
         String emailId = "cj@gmail.com";
 
-        Mockito.when(userRepository.findById())
+        //Mockito.when(userRepository.findById());
     }
 }
