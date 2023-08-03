@@ -90,7 +90,7 @@ public class UserServiceTest
     {
         String userId = UUID.randomUUID().toString();
         Mockito.when(userRepository.findById(userId)).thenReturn(Optional.of(user));
-        service.deleteUser(userId);
+        userService.deleteUser(userId);
         Mockito.verify(userRepository,Mockito.times(1)).delete(user);
     }
 
@@ -118,9 +118,9 @@ public class UserServiceTest
         Page<User>page = new PageImpl<>(userList);
         Mockito.when(userRepository.findAll((Pageable) Mockito.any())).thenReturn(page);
 
-        Sort sort = Sort.by("name").ascending();
-        Pageable pageable = PageRequest.of(1,2,sort);
-        PageableResponse<UserDto> allUser = service.getAllUser(1,2,"name","asc");
+        //Sort sort = Sort.by("name").ascending();
+        //Pageable pageable = PageRequest.of(1,2,sort);
+        PageableResponse<UserDto> allUser = userService.getAllUser(1,2,"name","asc");
         Assertions.assertEquals(3,allUser.getContent().size());
     }
 
@@ -137,10 +137,15 @@ public class UserServiceTest
         Assertions.assertEquals(user.getName(),userDto.getName(),"name not matched");
     }
 
+    @Test
     public void getUserByEmailTest()
     {
         String emailId = "cj@gmail.com";
 
-        //Mockito.when(userRepository.findById());
+        Mockito.when(userRepository.findByEmail(emailId)).thenReturn(Optional.of(user));
+        UserDto userDto = userService.getUserByEmail(emailId);
+
+        Assertions.assertNotNull(userDto);
+        Assertions.assertEquals(user.getEmail(),userDto.getEmail(),"Email not Matched");
     }
 }
