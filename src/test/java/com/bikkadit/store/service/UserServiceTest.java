@@ -1,5 +1,6 @@
 package com.bikkadit.store.service;
 
+import com.bikkadit.store.dto.PageableResponse;
 import com.bikkadit.store.dto.UserDto;
 import com.bikkadit.store.entity.User;
 import com.bikkadit.store.repository.UserRepository;
@@ -15,8 +16,11 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.*;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -93,5 +97,35 @@ public class UserServiceTest
         Mockito.when(userRepository.findById(userId)).thenReturn(Optional.of(user));
         service.deleteUser(userId);
         Mockito.verify(userRepository,Mockito.times(1)).delete(user);
+    }
+
+    @Test
+    public void getAllUsersTest()
+    {
+       User user1 = User.builder()
+                .name("Shree")
+                .email("cj@gmail.com")
+                .about("This is testing create method")
+                .gender("male")
+                .imageName("abc.png")
+                .password("abcd")
+                .build();
+        User user2 = User.builder()
+                .name("Kumar")
+                .email("cj@gmail.com")
+                .about("This is testing create method")
+                .gender("male")
+                .imageName("abc.png")
+                .password("abcd")
+                .build();
+
+        List<User>userList = Arrays.asList(user,user1,user2);
+        Page<User>page = new PageImpl<>(userList);
+        Mockito.when(userRepository.findAll((Pageable) Mockito.any())).thenReturn(page);
+
+        Sort sort = Sort.by("name").ascending();
+        Pageable pageable = PageRequest.of(1,2,sort);
+        PageableResponse<UserDto> allUser = service.getAllUser(1,2,"name","asc");
+        Assertions.assertEquals(3,allUser.getContent().size());
     }
 }
