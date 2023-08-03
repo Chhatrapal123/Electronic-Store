@@ -1,5 +1,6 @@
 package com.bikkadit.store.controller;
 
+import com.bikkadit.store.dto.PageableResponse;
 import com.bikkadit.store.dto.UserDto;
 import com.bikkadit.store.entity.User;
 import com.bikkadit.store.service.UserService;
@@ -17,6 +18,8 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+
+import java.util.Arrays;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -80,10 +83,31 @@ public class UserControllerTest
                 .andExpect(jsonPath("$.name").exists());
     }
 
-    public void deleteUserTest()
-    {
+    @Test
+    public void getAllUsersTest() throws Exception {
+        UserDto object1 = UserDto.builder().name("Ankit").email("ankit@gmail.com").password("abcd").about("Testing").build();
+        UserDto object2 = UserDto.builder().name("Sanket").email("sanket@gmail.com").password("abcd").about("Testing").build();
+        UserDto object3 = UserDto.builder().name("Prasad").email("prasad@gmail.com").password("abcd").about("Testing").build();
+        UserDto object4 = UserDto.builder().name("Venky").email("venky@gmail.com").password("abcd").about("Testing").build();
 
+        PageableResponse<UserDto> pageableResponse =new PageableResponse<>();
+        pageableResponse.setContent(Arrays.asList(object1,object2,object3,object4));
+        pageableResponse.setLastPage(false);
+        pageableResponse.setPageSize(10);
+        pageableResponse.setPageNumber(100);
+        pageableResponse.setTotalElement(1000L);
+        Mockito.when(userService.getAllUser(Mockito.anyInt(),Mockito.anyInt(),Mockito.anyString(),Mockito.anyString())).thenReturn(pageableResponse);
+
+        this.mockMvc.perform(MockMvcRequestBuilders.get("/")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk());
     }
+//    public void deleteUserTest()
+//    {
+//
+//    }
     private String convertObjectToJsonString(Object user)
     {
         try
