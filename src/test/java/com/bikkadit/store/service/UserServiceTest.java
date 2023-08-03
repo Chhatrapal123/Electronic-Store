@@ -148,4 +148,38 @@ public class UserServiceTest
         Assertions.assertNotNull(userDto);
         Assertions.assertEquals(user.getEmail(),userDto.getEmail(),"Email not Matched");
     }
+
+    @Test
+    public void searchUserTest()
+    {
+        User user1 = User.builder()
+                .name("Hinal")
+                .email("hinal@gmail.com")
+                .about("This is testing create method")
+                .gender("male")
+                .imageName("abc.png")
+                .password("abcd")
+                .build();
+        User user2 = User.builder()
+                .name("sagrika")
+                .email("sagarika@gmail.com")
+                .about("This is testing create method")
+                .gender("male")
+                .imageName("abc.png")
+                .password("abcd")
+                .build();
+        User user3 = User.builder()
+                .name("Advait")
+                .email("advait@gmail.com")
+                .about("This is testing create method")
+                .gender("male")
+                .imageName("abc.png")
+                .password("abcd")
+                .build();
+
+        String keyword = "advait";
+        Mockito.when(userRepository.findByNameContaining(keyword)).thenReturn(Arrays.asList(user,user1,user2,user3));
+        List<UserDto> userDtos = userService.searchUser(keyword);
+        Assertions.assertEquals(4,userDtos.size(),"size not matched");
+    }
 }
