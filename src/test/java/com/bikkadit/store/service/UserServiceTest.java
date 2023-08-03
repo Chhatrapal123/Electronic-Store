@@ -3,6 +3,7 @@ package com.bikkadit.store.service;
 import com.bikkadit.store.dto.UserDto;
 import com.bikkadit.store.entity.User;
 import com.bikkadit.store.repository.UserRepository;
+import com.bikkadit.store.service.impl.UserServiceImpl;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -25,14 +26,18 @@ public class UserServiceTest
     @Mock
     private UserRepository userRepository;
 
+    @InjectMocks
+    private UserServiceImpl service;
     @Autowired
     private UserService userService;
 
     User user;
 
+    String userId;
+
     @Autowired
     private ModelMapper mapper;
-    String userId;
+
     @BeforeEach
     public void init()
     {
@@ -63,8 +68,7 @@ public class UserServiceTest
     @Test
     public void updateUserTest()
     {
-
-        String userId="abjdhgcjhvc";
+        String userId = UUID.randomUUID().toString();
         UserDto userDto = UserDto.builder()
                 .name("Ankit Gangurde")
                 .about("This is updated user details")
@@ -74,10 +78,20 @@ public class UserServiceTest
         Mockito.when(userRepository.findById(Mockito.anyString())).thenReturn(Optional.of(user));
         Mockito.when(userRepository.save(Mockito.any())).thenReturn(user);
 
-        UserDto updatedUser = userService.updateUser(userDto, userId);
+        UserDto updatedUser = service.updateUser(userDto, userId);
         System.out.println(updatedUser.getName());
+        System.out.println(updatedUser.getImageName());
 
         Assertions.assertNotNull(userDto);
+        Assertions.assertEquals(userDto.getName(),updatedUser.getName(),"Name is not Valid");
     }
 
+    @Test
+    public void deleteUserTest()
+    {
+        String userId = UUID.randomUUID().toString();
+        Mockito.when(userRepository.findById(userId)).thenReturn(Optional.of(user));
+        service.deleteUser(userId);
+        Mockito.verify(userRepository,Mockito.times(1)).delete(user);
+    }
 }
