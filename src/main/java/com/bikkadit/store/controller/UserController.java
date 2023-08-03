@@ -42,7 +42,7 @@ public class UserController
      * @param userDto
      * @return
      */
-    @PostMapping("/")
+    @PostMapping
     public ResponseEntity<UserDto>createUser(@Valid @RequestBody UserDto userDto)
     {
         LOGGER.info("Inside createUser()");
