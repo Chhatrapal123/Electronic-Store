@@ -8,39 +8,36 @@ import com.bikkadit.store.service.impl.UserServiceImpl;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.*;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-
 @SpringBootTest
 public class UserServiceTest
 {
-    @Mock
+    @MockBean
     private UserRepository userRepository;
-
     @InjectMocks
     private UserServiceImpl service;
     @Autowired
     private UserService userService;
 
-    User user;
-
-    String userId;
-
     @Autowired
     private ModelMapper mapper;
+    User user;
+
+    User user1;
+
+    UserDto userDto;
 
     @BeforeEach
     public void init()
@@ -54,7 +51,6 @@ public class UserServiceTest
                 .imageName("abc.png")
                 .password("abcd")
                 .build();
-        userId="abc";
     }
 
     @Test
@@ -72,7 +68,7 @@ public class UserServiceTest
     @Test
     public void updateUserTest()
     {
-        String userId = UUID.randomUUID().toString();
+        String userId = "hasdfvjyehf";
         UserDto userDto = UserDto.builder()
                 .name("Ankit Gangurde")
                 .about("This is updated user details")
@@ -82,12 +78,11 @@ public class UserServiceTest
         Mockito.when(userRepository.findById(Mockito.anyString())).thenReturn(Optional.of(user));
         Mockito.when(userRepository.save(Mockito.any())).thenReturn(user);
 
-        UserDto updatedUser = service.updateUser(userDto, userId);
-        System.out.println(updatedUser.getName());
-        System.out.println(updatedUser.getImageName());
+        UserDto updateUser = userService.updateUser(userDto, userId);
+        System.out.println(updateUser.getName());
 
         Assertions.assertNotNull(userDto);
-        Assertions.assertEquals(userDto.getName(),updatedUser.getName(),"Name is not Valid");
+        Assertions.assertEquals(userDto.getName(),updateUser.getName(),"Name is not Valid");
     }
 
     @Test
@@ -127,5 +122,25 @@ public class UserServiceTest
         Pageable pageable = PageRequest.of(1,2,sort);
         PageableResponse<UserDto> allUser = service.getAllUser(1,2,"name","asc");
         Assertions.assertEquals(3,allUser.getContent().size());
+    }
+
+    @Test
+    public void getUserByIdTest()
+    {
+        String userId = "d7da596d-2a1c-4292-be7d-4f3a71e65f60";
+
+        Mockito.when(userRepository.findById(Mockito.anyString())).thenReturn(Optional.of(user));
+        // actual call of service method
+        UserDto id = userService.getUserById(userId);
+
+        Assertions.assertNotNull(id);
+        Assertions.assertEquals(user.getName(),id.getName(),"name not matched");
+    }
+
+    public void getUserByEmailTest()
+    {
+        String emailId = "cj@gmail.com";
+
+        Mockito.when(userRepository.findById())
     }
 }
