@@ -125,9 +125,9 @@ public class  ProductController {
         return new ResponseEntity<>(response,HttpStatus.CREATED);
     }
     //Serve image
-    @GetMapping("/iamge/{productId}")
-    public  void serveUserImage(@PathVariable String productId, HttpServletResponse response) throws IOException {
-        LOGGER.info("Initialize serveUserImage()");
+    @GetMapping("/image/{productId}")
+    public  void serveProductImage(@PathVariable String productId, HttpServletResponse response) throws IOException {
+        LOGGER.info("Initialize serveProductImage() for productId :" + productId);
         ProductDto productDto = productService.get(productId);
         InputStream resource = fileService.getResource(imagePath, productDto.getProductImageName());
         response.setContentType(MediaType.IMAGE_JPEG_VALUE);
