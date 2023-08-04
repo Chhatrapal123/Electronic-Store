@@ -91,7 +91,8 @@ public class UserControllerTest
     }
 
     @Test
-    public void getAllUsersTest() throws Exception {
+    public void getAllUsersTest() throws Exception
+    {
         UserDto object1 = UserDto.builder().name("Ankit").email("ankit@gmail.com").password("abcd").about("Testing").build();
         UserDto object2 = UserDto.builder().name("Sanket").email("sanket@gmail.com").password("abcd").about("Testing").build();
         UserDto object3 = UserDto.builder().name("Prasad").email("prasad@gmail.com").password("abcd").about("Testing").build();
