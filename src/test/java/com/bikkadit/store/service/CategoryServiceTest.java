@@ -81,6 +81,7 @@ public class CategoryServiceTest
     {
         String categoryId = UUID.randomUUID().toString();
         Mockito.when(categoryRepository.findById(categoryId)).thenReturn(Optional.of(category));
+
         categoryService.delete(categoryId);
         Mockito.verify(categoryRepository,Mockito.times(1)).delete(category);
     }
