@@ -72,7 +72,8 @@ public class UserControllerTest
 
     }
     @Test
-    public void updateUserTest() throws Exception {
+    public void updateUserTest() throws Exception
+    {
         String userId = "123";
         UserDto dto = this.mapper.map(user, UserDto.class);
 
