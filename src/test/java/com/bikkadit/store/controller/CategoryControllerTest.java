@@ -149,4 +149,19 @@ public class CategoryControllerTest
                 .andExpect(status().isOk());
     }
 
+    @Test
+    public void getSingleCategoryTest() throws Exception
+    {
+        String categoryId=UUID.randomUUID().toString();
+
+        CategoryDto categoryDto = mapper.map(category, CategoryDto.class);
+        Mockito.when(categoryService.getCategory(categoryId)).thenReturn(categoryDto);
+        mockMvc.perform(MockMvcRequestBuilders.get("/categories/"+categoryId)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.title").exists())
+                .andExpect(jsonPath("$.description").exists());
+    }
+
 }
