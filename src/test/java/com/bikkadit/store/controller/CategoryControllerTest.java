@@ -82,8 +82,7 @@ public class CategoryControllerTest
 
         Mockito.when(categoryService.update(Mockito.any(),Mockito.anyString())).thenReturn(dto);
 
-        this.mockMvc.perform(
-                        MockMvcRequestBuilders.put("/categories/"+categoryId)
+        this.mockMvc.perform(MockMvcRequestBuilders.put("/categories/"+categoryId)
                                 //.header(HttpHeaders.AUTHORIZATION,"Bearer Token")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(convertObjectToJsonString(category))
