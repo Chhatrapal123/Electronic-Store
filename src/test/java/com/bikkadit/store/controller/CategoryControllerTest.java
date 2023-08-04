@@ -19,6 +19,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -164,4 +165,39 @@ public class CategoryControllerTest
                 .andExpect(jsonPath("$.description").exists());
     }
 
+    @Test
+    public void searchCategoriesTest() throws Exception
+    {
+        CategoryDto categoryDto1=CategoryDto.builder().categoryId(UUID.randomUUID().toString())
+                .title("Accessories")
+                .description("Accessories available with good quality")
+                .coverImage("asd.png")
+                .build();
+        CategoryDto categoryDto2=CategoryDto.builder().categoryId(UUID.randomUUID().toString())
+                .title("Laptop")
+                .description("Laptop available with good quality")
+                .coverImage("abc.png")
+                .build();
+        CategoryDto categoryDto3=CategoryDto.builder().categoryId(UUID.randomUUID().toString())
+                .title("Gadgets")
+                .description("Gadgets products available with good quality")
+                .coverImage("pqr.png")
+                .build();
+        CategoryDto categoryDto4=CategoryDto.builder().categoryId(UUID.randomUUID().toString())
+                .title("Mobile")
+                .description("Mobile available with good quality")
+                .coverImage("klm.png")
+                .build();
+
+        String title="a";
+
+        List<CategoryDto>list = Arrays.asList(categoryDto1,categoryDto2,categoryDto4,categoryDto3);
+        Mockito.when(categoryService.searchCategory(title)).thenReturn(list);
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/categories/search/"+title)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk());
+    }
 }
