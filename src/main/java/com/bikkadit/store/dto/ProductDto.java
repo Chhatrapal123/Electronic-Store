@@ -1,17 +1,16 @@
 package com.bikkadit.store.dto;
 
 import com.bikkadit.store.entity.Category;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import java.util.Date;
 
 @NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
 @ToString
+@Builder
 public class ProductDto
 {
         private String productId;
