@@ -109,28 +109,44 @@ public class CategoryControllerTest
                 .andExpect(status().isOk());
     }
 
-//    @Test
-//    public void getAllCategoriesTest() throws Exception
-//    {
-//        CategoryDto object1 = CategoryDto.builder().title("Laptop").coverImage("abcd.png").description("Best Features").build();
-//        CategoryDto object2 = CategoryDto.builder().title("Mobiles").coverImage("abce.png").description("Best Speed").build();
-//        CategoryDto object3 = CategoryDto.builder().title("Gadgets").coverImage("abcg.png").description("Best quality").build();
-//
-//        PageableResponse<CategoryDto>pageableResponse=new PageableResponse<>();
-//        pageableResponse.setContent(Arrays.asList(
-//                object1,object2,object3
-//        ));
-//        pageableResponse.setLastPage(true);
-//        pageableResponse.setPageSize(10);
-//        pageableResponse.setTotalElement(1000L);
-//
-//        Mockito.when(categoryService.getAllCategory(Mockito.anyInt(),Mockito.anyInt(),Mockito.anyString(),Mockito.anyString())).thenReturn(pageableResponse);
-//        this.mockMvc.perform(MockMvcRequestBuilders.get("/")
-//                .contentType(MediaType.APPLICATION_JSON)
-//                .accept(MediaType.APPLICATION_JSON))
-//                .andDo(print())
-//                .andExpect(status().isOk());
-//
-//    }
+    @Test
+    public void getAllCategoriesTest() throws Exception {
+        CategoryDto categoryDto1=CategoryDto.builder().categoryId(UUID.randomUUID().toString())
+                .title("Accessories")
+                .description("Accessories available with good quality")
+                .coverImage("xyz.png")
+                .build();
+        CategoryDto categoryDto2=CategoryDto.builder().categoryId(UUID.randomUUID().toString())
+                .title("Laptops")
+                .description("Laptops available with good quality")
+                .coverImage("def.png")
+                .build();
+        CategoryDto categoryDto3=CategoryDto.builder().categoryId(UUID.randomUUID().toString())
+                .title("Gadgets")
+                .description("gadgets products available with good quality")
+                .coverImage("hjh.png")
+                .build();
+        CategoryDto categoryDto4=CategoryDto.builder().categoryId(UUID.randomUUID().toString())
+                .title("phones")
+                .description("phones with good quality")
+                .coverImage("dbw.png")
+                .build();
+
+        PageableResponse<CategoryDto> pageableResponse=new PageableResponse<>();
+        pageableResponse.setContent(Arrays.asList(categoryDto1,categoryDto2,categoryDto3,categoryDto4));
+        pageableResponse.setPageNumber(0);
+        pageableResponse.setPageSize(10);
+        pageableResponse.setTotalPage(100);
+        pageableResponse.setTotalElement(1000L);
+        pageableResponse.setLastPage(false);
+
+        Mockito.when(categoryService.getAllCategory(Mockito.anyInt(),Mockito.anyInt(),Mockito.anyString(),Mockito.anyString())).thenReturn(pageableResponse);
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/categories/")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk());
+    }
 
 }
