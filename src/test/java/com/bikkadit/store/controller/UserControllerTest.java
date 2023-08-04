@@ -135,22 +135,18 @@ public class UserControllerTest
                         .andExpect(status().isOk())
                         .andExpect(jsonPath("$.name").exists());
     }
-
     @Test
-    void getUserByEmail() throws Exception {
+    void getUserByEmail() throws Exception
+    {
         String email="ankit@gmail.com";
 
         UserDto userDto = mapper.map(user, UserDto.class);
-
         Mockito.when(userService.getUserByEmail(email)).thenReturn(userDto);
-
-        mockMvc.perform(
-                        MockMvcRequestBuilders.get("/users/email/" +email)
+        mockMvc.perform(MockMvcRequestBuilders.get("/users/email/" +email)
                                 .accept(MediaType.APPLICATION_JSON))
                                 .andDo(print())
                                 .andExpect(status().isOk())
                                 .andExpect(jsonPath("$.email").exists());
-
     }
 
     private String convertObjectToJsonString(Object user)
