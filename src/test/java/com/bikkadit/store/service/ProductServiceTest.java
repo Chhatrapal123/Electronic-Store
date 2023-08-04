@@ -95,29 +95,41 @@ public class ProductServiceTest
         Mockito.verify(productRepository,Mockito.times(1)).delete(product);
     }
 
-//    @Test
-//    public void getAllCategory()
-//    {
-//        Category category1 = Category.builder()
-//                .title("Laptop")
-//                .description("This is testing create method")
-//                .coverImage("abc.png")
-//                .build();
-//        Category category2 = Category.builder()
-//                .title("Laptop")
-//                .description("This is testing create method")
-//                .coverImage("abc.png")
-//                .build();
-//        List<Category> categoryList = Arrays.asList(category,category1,category2);
-//        Page<Category> page = new PageImpl<>(categoryList);
-//        Mockito.when(categoryRepository.findAll((Pageable) Mockito.any())).thenReturn(page);
-//
-//        //Sort sort = Sort.by("name").ascending();
-//        //Pageable pageable = PageRequest.of(1,2,sort);
-//        PageableResponse<CategoryDto> allUser = categoryService.getAllCategory(1,2,"name","asc");
-//        Assertions.assertEquals(3,allUser.getContent().size());
-//    }
-//
+    @Test
+    public void getAllProduct()
+    {
+        Product product1 = Product.builder()
+                .addedDate(new Date())
+                .title("Mobiles")
+                .price(2000)
+                .live(true)
+                .stock(true)
+                .productImageName("abc.png")
+                .description("This is best in Market")
+                .quantity(5)
+                .discountPrice(500)
+                .build();
+        Product product2 = Product.builder()
+                .addedDate(new Date())
+                .title("Laptops")
+                .price(2000)
+                .live(true)
+                .stock(true)
+                .productImageName("abc.png")
+                .description("This is best in Market")
+                .quantity(5)
+                .discountPrice(500)
+                .build();
+        List<Product> productList = Arrays.asList(product,product1,product2);
+        Page<Product> page = new PageImpl<>(productList);
+        Mockito.when(productRepository.findAll((Pageable) Mockito.any())).thenReturn(page);
+
+        //Sort sort = Sort.by("name").ascending();
+        //Pageable pageable = PageRequest.of(1,2,sort);
+        PageableResponse<ProductDto> allUser = productService.getAll(1,2,"name","asc");
+        Assertions.assertEquals(3,allUser.getContent().size());
+    }
+
 //    @Test
 //    public void getCategoryById()
 //    {
