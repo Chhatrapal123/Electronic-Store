@@ -99,7 +99,6 @@ public class CategoryServiceTest
                 .description("This is testing create method")
                 .coverImage("abc.png")
                 .build();
-
         List<Category> categoryList = Arrays.asList(category,category1,category2);
         Page<Category> page = new PageImpl<>(categoryList);
         Mockito.when(categoryRepository.findAll((Pageable) Mockito.any())).thenReturn(page);
