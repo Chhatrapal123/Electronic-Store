@@ -116,9 +116,28 @@ public class UserControllerTest
     @Test
     public void deleteUserTest() throws Exception
     {
-//        Mockito.when(userService.deleteUser(user)).thenReturn(Optional.of(user))
+        String userId = UUID.randomUUID().toString();
+
+        mockMvc.perform(MockMvcRequestBuilders.delete("/users/"+userId)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+    }
+    @Test
+    void getSingleUSerById() throws Exception {
+        String userId = UUID.randomUUID().toString();
+
+        UserDto userDto = modelMapper.map(user, UserDto.class);
+
+        Mockito.when(userServiceI.getUserById(userId)).thenReturn(userDto);
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/users/" +userId)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.name").exists());
 
     }
+
     private String convertObjectToJsonString(Object user)
     {
         try
