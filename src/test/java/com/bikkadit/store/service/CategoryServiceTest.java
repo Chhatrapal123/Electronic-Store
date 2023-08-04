@@ -122,4 +122,28 @@ public class CategoryServiceTest
         Assertions.assertNotNull(categoryDto);
         Assertions.assertEquals(category.getTitle(),categoryDto.getTitle(),"Title not matched");
     }
+    @Test
+    public void searchCategory()
+    {
+        Category category1 = Category.builder()
+                .title("Laptop")
+                .description("This is best Laptop ")
+                .coverImage("abc.png")
+                .build();
+        Category category2 = Category.builder()
+                .title("Desktop")
+                .description("Desktops are good for gaming Laptop")
+                .coverImage("abc.png")
+                .build();
+        Category category3 = Category.builder()
+                .title("Mobilephone")
+                .description("This is best Mobile with having greate Features ")
+                .coverImage("abc.png")
+                .build();
+
+        String keyword = "Laptop";
+        Mockito.when(categoryRepository.findByTitleContaining(keyword)).thenReturn(Arrays.asList(category,category1,category2,category3));
+        List<CategoryDto> categoryDtos = categoryService.searchCategory(keyword);
+        Assertions.assertEquals(4,categoryDtos.size(),"size not matched");
+    }
 }
