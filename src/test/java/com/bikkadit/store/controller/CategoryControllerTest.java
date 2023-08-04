@@ -19,6 +19,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.util.Arrays;
+import java.util.UUID;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -75,22 +76,26 @@ public class CategoryControllerTest
     }
 
     @Test
-    public void updateCategory() throws Exception
-    {
-        String categoryId = "123";
-        CategoryDto dto = this.mapper.map(category, CategoryDto.class);
+    void updateCategoryTest() throws Exception {
+        String categoryId= UUID.randomUUID().toString();
+        CategoryDto categoryDto=CategoryDto.builder()
+                .categoryId(categoryId)
+                .title("Mobiles")
+                .description("Mobiles available with discounts")
+                .coverImage("abc.png")
+                .build();
 
-        Mockito.when(categoryService.update(Mockito.any(),Mockito.anyString())).thenReturn(dto);
-
-        this.mockMvc.perform(MockMvcRequestBuilders.put("/categories/"+categoryId)
-                                //.header(HttpHeaders.AUTHORIZATION,"Bearer Token")
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content(convertObjectToJsonString(category))
-                                .accept(MediaType.APPLICATION_JSON))
+        Mockito.when(categoryService.update(Mockito.any(),Mockito.anyString())).thenReturn(categoryDto);
+        mockMvc.perform(MockMvcRequestBuilders.put("/categories/" +categoryId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(convertObjectToJsonString(category))
+                        .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.name").exists());
+                .andExpect(jsonPath("$.title").exists())
+                .andExpect(jsonPath("$.description").exists());
     }
+
 
 //    @Test
 //    public void getAllCategoriesTest() throws Exception
