@@ -3,8 +3,10 @@ package com.bikkadit.store.service;
 import com.bikkadit.store.dto.CategoryDto;
 import com.bikkadit.store.dto.PageableResponse;
 import com.bikkadit.store.dto.ProductDto;
+import com.bikkadit.store.dto.UserDto;
 import com.bikkadit.store.entity.Category;
 import com.bikkadit.store.entity.Product;
+import com.bikkadit.store.entity.User;
 import com.bikkadit.store.repository.CategoryRepository;
 import com.bikkadit.store.repository.ProductRepository;
 import org.junit.jupiter.api.Assertions;
@@ -15,9 +17,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 
 import java.util.*;
 
@@ -33,6 +33,7 @@ public class ProductServiceTest
 
     @Autowired
     private ModelMapper mapper;
+
 
     @BeforeEach
     public void init()
@@ -143,28 +144,52 @@ public class ProductServiceTest
         Assertions.assertNotNull(productDto);
         Assertions.assertEquals(product.getTitle(),productDto.getTitle(),"Title not matched");
     }
-//    @Test
-//    public void searchCategory()
-//    {
-//        Category category1 = Category.builder()
-//                .title("Laptop")
-//                .description("This is best Laptop ")
-//                .coverImage("abc.png")
-//                .build();
-//        Category category2 = Category.builder()
-//                .title("Desktop")
-//                .description("Desktops are good for gaming Laptop")
-//                .coverImage("abc.png")
-//                .build();
-//        Category category3 = Category.builder()
-//                .title("Mobilephone")
-//                .description("This is best Mobile with having greate Features ")
-//                .coverImage("abc.png")
-//                .build();
-//
-//        String keyword = "Laptop";
-//        Mockito.when(categoryRepository.findByTitleContaining(keyword)).thenReturn(Arrays.asList(category,category1,category2,category3));
-//        List<CategoryDto> categoryDtos = categoryService.searchCategory(keyword);
-//        Assertions.assertEquals(4,categoryDtos.size(),"size not matched");
-//    }
+    @Test
+    public void searchProduct()
+    {
+        Product product1 = Product.builder()
+                .addedDate(new Date())
+                .title("Laptops")
+                .price(32000)
+                .live(true)
+                .stock(true)
+                .productImageName("abc.png")
+                .description("This is best in Market")
+                .quantity(5)
+                .discountPrice(2000)
+                .build();
+        Product product2 = Product.builder()
+                .addedDate(new Date())
+                .title("Mobile")
+                .price(22000)
+                .live(true)
+                .stock(true)
+                .productImageName("abc.png")
+                .description("This is best in Market")
+                .quantity(5)
+                .discountPrice(1000)
+                .build();
+        Product product3 = Product.builder()
+                .addedDate(new Date())
+                .title("Gadgets")
+                .price(8000)
+                .live(true)
+                .stock(true)
+                .productImageName("abc.png")
+                .description("This is best in Market")
+                .quantity(5)
+                .discountPrice(500)
+                .build();
+
+        String subTitle = "Laptops";
+        List<Product>productList = Arrays.asList(product,product1,product2,product3);
+
+        Sort sort = Sort.by("name").ascending();
+        Pageable pageable = PageRequest.of(2,2,sort);
+        Page<Product>page = new PageImpl<>(productList);
+        Mockito.when(productRepository.findByTitleContaining(subTitle,pageable)).thenReturn(page);
+
+        PageableResponse<ProductDto> allProduct = productService.searchByTitle("Laptops",2,2,"name","asc");
+        Assertions.assertEquals(4,allProduct.getTotalElement());
+    }
 }
