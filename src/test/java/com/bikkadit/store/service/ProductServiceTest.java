@@ -60,24 +60,30 @@ public class ProductServiceTest
         Assertions.assertNotNull(product1);
         Assertions.assertEquals("Mobiles",product1.getTitle());
     }
-//    @Test
-//    public void updateCategory()
-//    {
-//        String categoryId = "hasdfvjyehf";
-//        CategoryDto categoryDto = CategoryDto.builder()
-//                .title("Laptop")
-//                .description("This is updated user details")
-//                .coverImage("xyz.png")
-//                .build();
-//        Mockito.when(categoryRepository.findById(Mockito.anyString())).thenReturn(Optional.of(category));
-//        Mockito.when(categoryRepository.save(Mockito.any())).thenReturn(category);
-//
-//        CategoryDto updateUser = categoryService.update(categoryDto, categoryId);
-//        System.out.println(updateUser.getTitle());
-//
-//        Assertions.assertNotNull(updateUser);
-//        Assertions.assertEquals(updateUser.getTitle(),updateUser.getTitle(),"Name is not Valid");
-//    }
+    @Test
+    public void updateProduct()
+    {
+        String productId = "hasdfvjyehf";
+        ProductDto productDto = ProductDto.builder()
+                .addedDate(new Date())
+                .title("Mobiles")
+                .price(2000)
+                .live(true)
+                .stock(true)
+                .productImageName("abc.png")
+                .description("This is best in Market")
+                .quantity(5)
+                .discountPrice(500)
+                .build();
+        Mockito.when(productRepository.findById(Mockito.anyString())).thenReturn(Optional.of(product));
+        Mockito.when(productRepository.save(Mockito.any())).thenReturn(product);
+
+        ProductDto updatedProduct = productService.update(productDto, productId);
+        System.out.println(updatedProduct.getTitle());
+
+        Assertions.assertNotNull(updatedProduct);
+        Assertions.assertEquals(updatedProduct.getTitle(),updatedProduct.getTitle(),"product name is not Valid");
+    }
 //
 //    @Test
 //    public void deleteCategory()
