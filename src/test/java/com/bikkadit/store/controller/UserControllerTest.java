@@ -13,20 +13,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-
-import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
-import java.util.Optional;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.mock;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -91,26 +84,32 @@ public class UserControllerTest
     }
 
     @Test
-    public void getAllUsersTest() throws Exception
+    void getAllUSersTest() throws Exception
     {
-        UserDto object1 = UserDto.builder().name("Ankit").email("ankit@gmail.com").password("abcd").about("Testing").build();
-        UserDto object2 = UserDto.builder().name("Sanket").email("sanket@gmail.com").password("abcd").about("Testing").build();
-        UserDto object3 = UserDto.builder().name("Prasad").email("prasad@gmail.com").password("abcd").about("Testing").build();
-        UserDto object4 = UserDto.builder().name("Venky").email("venky@gmail.com").password("abcd").about("Testing").build();
+        UserDto userDto1 = UserDto.builder().userId(UUID.randomUUID().toString()).name("anuj")
+                .email("anuj@gmail.com").password("anuj56").about("developer").imageName("abc.png").build();
+        UserDto userDto2 = UserDto.builder().userId(UUID.randomUUID().toString()).name("venky")
+                .email("venky@gmail.com").password("venkyq1").about("tester").imageName("xyz.png").build();
+        UserDto userDto3 = UserDto.builder().userId(UUID.randomUUID().toString()).name("pankaj")
+                .email("pankaj@gmail.com").password("pankaj123").about("devops").imageName("def.png").build();
+        UserDto userDto4 = UserDto.builder().userId(UUID.randomUUID().toString()).name("ankit")
+                .email("ankit@gmail.com").password("ankit455").about("developer").imageName("qrx.png").build();
 
-        PageableResponse<UserDto> pageableResponse =new PageableResponse<>();
-        pageableResponse.setContent(Arrays.asList(object1,object2,object3,object4));
-        pageableResponse.setLastPage(false);
+        PageableResponse<UserDto> pageableResponse=new PageableResponse<>();
+        pageableResponse.setContent(Arrays.asList(userDto1,userDto2,userDto3,userDto4));
+        pageableResponse.setPageNumber(0);
         pageableResponse.setPageSize(10);
-        pageableResponse.setPageNumber(100);
         pageableResponse.setTotalElement(1000L);
+        pageableResponse.setTotalPage(100);
+        pageableResponse.setLastPage(false);
+
         Mockito.when(userService.getAllUser(Mockito.anyInt(),Mockito.anyInt(),Mockito.anyString(),Mockito.anyString())).thenReturn(pageableResponse);
 
-        this.mockMvc.perform(MockMvcRequestBuilders.get("/")
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON))
-                .andDo(print())
-                .andExpect(status().isOk());
+        mockMvc.perform(MockMvcRequestBuilders.get("/users/")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                        .andDo(print())
+                        .andExpect(status().isOk());
     }
 
     @Test
@@ -123,18 +122,34 @@ public class UserControllerTest
                 .andExpect(status().isOk());
     }
     @Test
-    void getSingleUSerById() throws Exception {
+    void getUSerById() throws Exception {
         String userId = UUID.randomUUID().toString();
 
-        UserDto userDto = modelMapper.map(user, UserDto.class);
+        UserDto userDto = mapper.map(user, UserDto.class);
 
-        Mockito.when(userServiceI.getUserById(userId)).thenReturn(userDto);
+        Mockito.when(userService.getUserById(userId)).thenReturn(userDto);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/users/" +userId)
                         .accept(MediaType.APPLICATION_JSON))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.name").exists());
+                        .andDo(print())
+                        .andExpect(status().isOk())
+                        .andExpect(jsonPath("$.name").exists());
+    }
+
+    @Test
+    void getUserByEmail() throws Exception {
+        String email="ankit@gmail.com";
+
+        UserDto userDto = mapper.map(user, UserDto.class);
+
+        Mockito.when(userService.getUserByEmail(email)).thenReturn(userDto);
+
+        mockMvc.perform(
+                        MockMvcRequestBuilders.get("/users/email/" +email)
+                                .accept(MediaType.APPLICATION_JSON))
+                                .andDo(print())
+                                .andExpect(status().isOk())
+                                .andExpect(jsonPath("$.email").exists());
 
     }
 
