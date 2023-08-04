@@ -16,11 +16,17 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 
+import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
+import java.util.Optional;
+import java.util.UUID;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.mock;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -104,10 +110,13 @@ public class UserControllerTest
                 .andDo(print())
                 .andExpect(status().isOk());
     }
-//    public void deleteUserTest()
-//    {
-//
-//    }
+
+    @Test
+    public void deleteUserTest() throws Exception
+    {
+//        Mockito.when(userService.deleteUser(user)).thenReturn(Optional.of(user))
+
+    }
     private String convertObjectToJsonString(Object user)
     {
         try
