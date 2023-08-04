@@ -130,19 +130,19 @@ public class ProductServiceTest
         Assertions.assertEquals(3,allUser.getContent().size());
     }
 
-//    @Test
-//    public void getCategoryById()
-//    {
-//        String categoryId = "d7da596d-2a1c-4292-be7d-4f3a71e65f60";
-//
-//        Mockito.when(categoryRepository.findById(Mockito.anyString())).thenReturn(Optional.of(category));
-//
-//        // actual call of service method
-//        CategoryDto categoryDto = categoryService.getCategory(categoryId);
-//
-//        Assertions.assertNotNull(categoryDto);
-//        Assertions.assertEquals(category.getTitle(),categoryDto.getTitle(),"Title not matched");
-//    }
+    @Test
+    public void getProductById()
+    {
+        String productId = "d7da596d-2a1c-4292-be7d-4f3a71e65f60";
+
+        Mockito.when(productRepository.findById(Mockito.anyString())).thenReturn(Optional.of(product));
+
+        // actual call of service method
+        ProductDto productDto = productService.get(productId);
+
+        Assertions.assertNotNull(productDto);
+        Assertions.assertEquals(product.getTitle(),productDto.getTitle(),"Title not matched");
+    }
 //    @Test
 //    public void searchCategory()
 //    {
