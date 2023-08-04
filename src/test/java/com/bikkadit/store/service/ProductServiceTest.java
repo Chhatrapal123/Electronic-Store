@@ -84,17 +84,17 @@ public class ProductServiceTest
         Assertions.assertNotNull(updatedProduct);
         Assertions.assertEquals(updatedProduct.getTitle(),updatedProduct.getTitle(),"product name is not Valid");
     }
-//
-//    @Test
-//    public void deleteCategory()
-//    {
-//        String categoryId = UUID.randomUUID().toString();
-//        Mockito.when(categoryRepository.findById(categoryId)).thenReturn(Optional.of(category));
-//
-//        categoryService.delete(categoryId);
-//        Mockito.verify(categoryRepository,Mockito.times(1)).delete(category);
-//    }
-//
+
+    @Test
+    public void deleteProduct()
+    {
+        String productId = UUID.randomUUID().toString();
+        Mockito.when(productRepository.findById(productId)).thenReturn(Optional.of(product));
+
+        productService.delete(productId);
+        Mockito.verify(productRepository,Mockito.times(1)).delete(product);
+    }
+
 //    @Test
 //    public void getAllCategory()
 //    {
