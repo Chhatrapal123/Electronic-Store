@@ -76,7 +76,8 @@ public class CategoryControllerTest
     }
 
     @Test
-    void updateCategoryTest() throws Exception {
+    public void updateCategoryTest() throws Exception
+    {
         String categoryId= UUID.randomUUID().toString();
         CategoryDto categoryDto=CategoryDto.builder()
                 .categoryId(categoryId)
@@ -96,6 +97,17 @@ public class CategoryControllerTest
                 .andExpect(jsonPath("$.description").exists());
     }
 
+    @Test
+    public void deleteCategoryTest() throws Exception
+    {
+        String categoryId=UUID.randomUUID().toString();
+
+        mockMvc.perform(MockMvcRequestBuilders.delete("/categories/"+categoryId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk());
+    }
 
 //    @Test
 //    public void getAllCategoriesTest() throws Exception
